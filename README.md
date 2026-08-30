@@ -122,8 +122,8 @@ Update before submission:
 
 | Registered member | Major contribution |
 |---|---|
-| TODO | TODO |
-| TODO | TODO |
+| Akib Hasan Pyil (`@HippomasAKiB1`) | Led repository integration and implementation of the GPA engine, result workflow, automated testing, final Git history, deployment, and submission preparation. |
+| Nazat E Rose (`@Rhythm-099`) | Contributed to result-review UI refinement, teacher checking workflow review, responsive testing, and manual verification of grading and edge-case behaviour. |
 
 ## AI assistance disclosure
 
