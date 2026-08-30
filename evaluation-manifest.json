@@ -21,8 +21,8 @@
     },
     {
       "problem_id": "P08",
-      "repository_url": "TODO",
-      "live_url": "TODO",
+      "repository_url": "https://github.com/HippomasAKiB1/LSH26-T065-P08",
+      "live_url": "https://lsh-26-t065-p08.vercel.app/",
       "commit_sha": "TODO",
       "loads_sample_data": "yes; organizer JSON fixture is seeded on start, case selection and file loading are supported, and a single P08 JSON case can also be pasted with row-level validation reporting",
       "requirements": {

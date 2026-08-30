@@ -4,7 +4,7 @@
 **Problem ID:** `P08`  
 **Tier:** `02`  
 **Repository:** `lsh26-t065-p08`  
-**Live URL:** `TODO: add deployed URL before submission`
+**Live URL:** https://lsh-26-t065-p08.vercel.app/
 
 ResultLens converts raw student marks into deterministic subject grade points, final GPA and letter results, then keeps a full calculation trace so the school can explain *why* each result happened before publishing it.
 
