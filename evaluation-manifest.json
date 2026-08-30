@@ -1,40 +1,81 @@
 {
-  "release_version": "2.1",
   "team_id": "LSH26-T065",
-  "form_receipt_time": "set by the organizer from the Google Form",
-  "problems": [
+  "problem_id": "P08",
+  "repository_name": "lsh26-t065-p08",
+  "live_url": "https://lsh-26-t065-p08.vercel.app",
+  "demo_video_url_optional": "",
+  "event_start_code": "LSH26-8490-C900",
+  "repository_created_before_release": false,
+  "pre_event_materials": [],
+  "sample_data": {
+    "loads_published_fixture": true,
+    "method": "The published P08 fixture is bundled with the application and can be selected directly in the browser. Judges may also load a compatible JSON file using Load JSON or paste a compatible case using the JSON validation workflow.",
+    "reset_instructions": "Use the Reset Case control to restore the currently selected organizer case. Reloading the application also restores the published fixture."
+  },
+  "problem_solving_method": "We implemented the result processor as a deterministic grading engine separated from the user interface. Each subject is evaluated independently against the published grading and pass rules, practical subjects enforce separate theory and practical pass gates, absence remains semantically distinct from a numeric zero, optional-subject contribution is calculated using max(0, GP - 2), and any compulsory failure overrides the final GPA to 0.00 and grade F. The application also retains the uncancelled calculation for traceability and derives the teacher checking lists from the same calculated result objects.",
+  "requirements": {
+    "R1": {
+      "status": "complete",
+      "evidence": "The application loads and processes the published P08 student marks cases, including compulsory subjects, optional subjects, practical components and absence values. Case normalization and validation are implemented in src/results.js and the loading workflows in src/app.js."
+    },
+    "R2": {
+      "status": "complete",
+      "evidence": "The GPA engine in src/results.js applies the published grade bands, separate practical theory and practical pass gates, compulsory-failure override, optional-subject bonus formula, GPA cap, absence behaviour and final letter-grade rules. Calculated results are displayed in the Student Results section."
+    },
+    "R3": {
+      "status": "complete",
+      "evidence": "Selecting a student from the Student Results section opens a detailed calculation trace showing subject marks, component pass or failure reasons, grade points, compulsory total, optional contribution, uncancelled GPA and final result. Calculation data is produced by src/results.js and presented through src/app.js."
+    },
+    "R4": {
+      "status": "complete",
+      "evidence": "The Teacher Checking Lists section implements clarification R-29 with independent lists for optional GP <= 2.0 or optional AB, practical component below 8, and absence in any subject. A student may correctly appear in more than one list. List generation is implemented by checkingLists() in src/results.js."
+    }
+  },
+  "team_members": [
     {
-      "problem_id": "P02",
-      "repository_url": "TODO",
-      "live_url": "TODO",
-      "commit_sha": "TODO",
-      "loads_sample_data": "yes; organizer JSON fixture is seeded on start, case selection is supported, and judge-shaped JSON can be loaded through Import JSON",
-      "requirements": {
-        "R1": { "status": "complete", "evidence": "Active Inventory loads 40+ medicines from the organizer-shaped fixture and displays the required stock fields." },
-        "R2": { "status": "complete", "evidence": "The four expiry groups are recalculated from the case reference date with tested -1/0/30/31/90/91-day boundaries." },
-        "R3": { "status": "complete", "evidence": "Mark returned moves a batch to the returned register and excludes it before every active group count and active value calculation; restore is also supported." },
-        "R4": { "status": "complete", "evidence": "Expired and 0-30-day value-at-risk totals use quantity x unit_price_bdt with integer-paisa arithmetic." }
-      },
-      "known_limitations": [
-        "Inventory changes are session-only; the hackathon sprint does not include authenticated users or persistent pharmacy storage."
+      "registered_name": "Akib Hasan Pyil",
+      "github_username": "HippomasAKiB1",
+      "major_contribution": "Led repository integration and implementation of the GPA/result workflow, calculation trace, automated testing, Git history, deployment, and final submission preparation.",
+      "evidence_paths_or_commits": [
+        "src/results.js",
+        "src/app.js",
+        "tests/results.test.js",
+        "README.md",
+        "evaluation-manifest.json"
       ]
     },
     {
-      "problem_id": "P08",
-      "repository_url": "https://github.com/HippomasAKiB1/LSH26-T065-P08",
-      "live_url": "https://lsh-26-t065-p08.vercel.app/",
-      "commit_sha": "TODO",
-      "loads_sample_data": "yes; organizer JSON fixture is seeded on start, case selection and file loading are supported, and a single P08 JSON case can also be pasted with row-level validation reporting",
-      "requirements": {
-        "R1": { "status": "complete", "evidence": "Loads 60+ students across two classes with six compulsory subjects, one optional subject, separate theory/practical marks, and a distinct AB state." },
-        "R2": { "status": "complete", "evidence": "Pure grading functions implement every published grade band, separate practical pass gate, optional bonus, divisor/cap, compulsory-failure override, GPA, and final letter." },
-        "R3": { "status": "complete", "evidence": "Per-student evidence shows actual marks, subject GP, exact applied rule, failure reasons, optional contribution, uncancelled average, and final GPA." },
-        "R4": { "status": "complete", "evidence": "Independent optional GP<=2/AB, practical<8, and any-AB checking lists follow clarification R-29 and allow overlapping membership." }
-      },
-      "known_limitations": [
-        "Bonus row-level rejected-input reporting supports pasted P08 JSON case data rather than XLSX/CSV parsing.",
-        "Data is session-only; authentication and permanent school result storage are production follow-ups."
+      "registered_name": "Nazat E Rose",
+      "github_username": "Rhythm-099",
+      "major_contribution": "Contributed to result-review interface refinement, teacher checking workflow review, responsive testing, and manual verification of grading and edge-case behaviour.",
+      "evidence_paths_or_commits": [
+        "src/app.js",
+        "styles.css",
+        "index.html"
       ]
     }
-  ]
+  ],
+  "major_design_decisions": [
+    "Kept the grading engine deterministic and independent from the UI so every rule can be tested directly without relying on rendered state.",
+    "Treated AB as a distinct semantic value rather than numeric zero so absence-related checking lists and traces remain correct.",
+    "Required practical subjects to independently pass theory and practical components instead of using only their combined mark.",
+    "Applied optional contribution as max(0, optional GP - 2) and capped the calculated GPA at 5.00 according to the published rules.",
+    "Preserved the uncancelled calculated average in the trace even when a compulsory failure forces the published GPA to 0.00, making the final result auditable.",
+    "Generated teacher checking lists from the same result objects used by the main result table so the UI and review workflows cannot diverge.",
+    "Provided file loading, pasted JSON validation, loading states, error states and responsive layouts to make organizer and judge cases easy to inspect."
+  ],
+  "known_limitations": [
+    "The application processes results entirely in the browser and does not save cases or calculated results to a remote database.",
+    "Imported or pasted data must follow the expected P08 structure; malformed rows are rejected and reported rather than automatically repaired.",
+    "Printable result views use the browser's native print functionality and therefore final print formatting can vary slightly between browsers."
+  ],
+  "ai_tools_used": [
+    {
+      "tool": "ChatGPT",
+      "used_for": "Problem decomposition, grading-rule review, implementation drafting and review, edge-case analysis, automated test planning, UI refinement, documentation drafting, and debugging support.",
+      "how_output_was_verified": "The team checked implementation decisions against the published P08 specification and clarification rules, ran the automated grading and boundary test suite, processed the published organizer fixtures, and manually verified the final deployed result, trace, absence, practical-failure and checking-list workflows."
+    }
+  ],
+  "licenses_file": "LICENSES.md",
+  "declaration": "The information above is complete and truthful to the best of the team's knowledge."
 }
