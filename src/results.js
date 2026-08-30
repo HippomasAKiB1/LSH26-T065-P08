@@ -42,6 +42,8 @@ export function round2(value) {
   return Math.round((value + Number.EPSILON) * 100) / 100;
 }
 
+// Practical subjects require separate pass gates (theory >= 25/75, practical >= 8/25).
+// AB is semantically distinct from numeric zero.
 export function evaluateSubject(subject, mark) {
   if (!subject || typeof subject !== "object") throw new Error("Subject definition is missing.");
 
@@ -207,6 +209,7 @@ export function validateCaseRows(raw) {
   return { sanitized, accepted: accepted.length, rejected };
 }
 
+// Compulsory failure forces final GPA to 0.00 while retaining the uncancelled average for traceability.
 export function evaluateStudent(caseData, student) {
   const subjectMap = new Map(caseData.subjects.map((subject) => [subject.code, subject]));
   const compulsoryResults = caseData.compulsory.map((code) => {
@@ -259,6 +262,7 @@ export function evaluateCase(caseData) {
   return caseData.students.map((student) => evaluateStudent(caseData, student));
 }
 
+// Clarification R-29: checking lists are independent and membership may overlap.
 export function checkingLists(results) {
   return {
     optional: results.filter((student) => student.flags.optionalCheck),

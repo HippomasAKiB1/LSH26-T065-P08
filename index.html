@@ -41,7 +41,7 @@
         <section class="hero" id="overview" aria-labelledby="page-title">
           <div class="hero-copy">
             <div class="eyebrow-row">
-              <span class="eyebrow">School result control center</span>
+              <span class="eyebrow">School result & GPA evaluation</span>
               <span class="tier-chip">Tier 02</span>
               <span class="spec-chip">Rule set v2.1</span>
             </div>
@@ -59,7 +59,7 @@
           <article class="readiness-card" aria-label="Publication readiness">
             <div class="readiness-top">
               <span class="readiness-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="m8 12 2.5 2.5L16.5 8"/></svg></span>
-              <span class="live-label"><i></i> Live verification</span>
+              <span class="live-label"><i></i> Active session</span>
             </div>
             <div class="readiness-label">Publication readiness</div>
             <div class="readiness-value"><strong data-stat="flagged">--</strong><span>students need a manual check</span></div>
@@ -113,7 +113,7 @@
 
         <section class="analytics-grid" aria-label="Class performance analytics">
           <article class="panel analytics-wide">
-            <div class="panel-head"><div><span class="section-kicker">Class performance</span><h2>Pass rate and grade distribution</h2><p>Fast comparison across both classes from the same calculated result objects.</p></div><span class="micro-badge">Bonus insight</span></div>
+            <div class="panel-head"><div><span class="section-kicker">Class performance</span><h2>Pass rate and grade distribution</h2><p>Comparison across both classes from calculated result objects.</p></div><span class="micro-badge">Overview</span></div>
             <div id="class-summary" class="class-summary"></div>
           </article>
           <article class="panel failures-panel">
@@ -124,7 +124,7 @@
 
         <section class="panel results-panel" id="results" aria-labelledby="results-title">
           <div class="panel-head results-head">
-            <div><span class="section-kicker">Required result register</span><h2 id="results-title">Student results</h2><p>Click a student to inspect the exact marks, grade points, and rules that produced the final result.</p></div>
+            <div><span class="section-kicker">Student register</span><h2 id="results-title">Student results</h2><p>Click a student to inspect the exact marks, grade points, and rules that produced the final result.</p></div>
             <div class="filters">
               <label class="search-box"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg><input id="search" type="search" placeholder="Search student, ID, class..." aria-label="Search students" /></label>
               <select id="class-filter" aria-label="Filter by class"><option value="all">All classes</option></select>
@@ -143,8 +143,8 @@
 
         <section class="panel checks-panel" id="checks" aria-labelledby="checks-title">
           <div class="panel-head checks-head">
-            <div><span class="section-kicker">Required pre-publication review</span><h2 id="checks-title">Teacher checking lists</h2><p>Published clarification R-29. A student can correctly appear in more than one list.</p></div>
-            <div class="clarification-pill"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg><span><strong>Clarification aligned</strong><small>Optional <= 2/AB, practical &lt; 8, any AB</small></span></div>
+            <div><span class="section-kicker">Teacher verification</span><h2 id="checks-title">Teacher checking lists</h2><p>Published clarification R-29. A student can correctly appear in more than one list.</p></div>
+            <div class="clarification-pill"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg><span><strong>Rule R-29</strong><small>Optional &le; 2/AB, practical &lt; 8, any AB</small></span></div>
           </div>
           <div class="check-grid">
             <article class="check-card check-optional">
@@ -176,7 +176,7 @@
 
     <dialog id="paste-dialog" class="paste-dialog">
       <div class="paste-shell">
-        <div class="paste-head"><div><span class="section-kicker">Bonus import workflow</span><h2>Paste a P08 marks case</h2><p>Valid student rows are accepted. Rejected rows are reported with the exact validation reason.</p></div><button id="close-paste" class="icon-btn" type="button" aria-label="Close paste dialog"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+        <div class="paste-head"><div><span class="section-kicker">JSON validation</span><h2>Paste a P08 marks case</h2><p>Valid student rows are accepted. Rejected rows are reported with the exact validation reason.</p></div><button id="close-paste" class="icon-btn" type="button" aria-label="Close paste dialog"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
         <textarea id="paste-input" spellcheck="false" placeholder='Paste one P08 case object here, e.g. { "case_id": "MY_CASE", "subjects": [...], "compulsory": [...], "students": [...] }'></textarea>
         <div class="paste-actions"><span>Uses the exact same grading engine as organizer cases.</span><button class="btn btn-primary" id="process-paste" type="button">Validate and load</button></div>
       </div>
