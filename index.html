@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ResultLens explainable school GPA engine for LofiStack Hackathon 2026 P08" />
+    <meta name="theme-color" content="#0b1020" />
+    <title>ResultLens | Explainable GPA Engine</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <a class="brand brand-logo" href="#overview" aria-label="ResultLens home">
+          <span class="brand-logo-card">
+            <img class="brand-logo-image" src="./assets/brand-logo.png" alt="ResultLens" />
+          </span>
+        </a>
+
+        <nav class="header-nav" aria-label="Page sections">
+          <a class="nav-link active" href="#overview">Overview</a>
+          <a class="nav-link" href="#results">Results</a>
+          <a class="nav-link" href="#checks">Checks</a>
+        </nav>
+
+        <div class="header-actions">
+          <span class="event-chip"><span class="event-dot"></span> LSH26-T065 / P08 / Tier 02</span>
+          <button class="btn btn-ghost" id="paste-json" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h8M9 3h6v4H9zM6 5H5v16h14V5h-1"/></svg>
+            Paste JSON
+          </button>
+          <label class="btn btn-primary file-button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0-12 4 4m-4-4L8 7M5 13v6h14v-6"/></svg>
+            Load JSON
+            <input id="file-input" type="file" accept="application/json,.json" hidden />
+          </label>
+        </div>
+      </header>
+
+      <main class="page-shell">
+        <section class="hero" id="overview" aria-labelledby="page-title">
+          <div class="hero-copy">
+            <div class="eyebrow-row">
+              <span class="eyebrow">School result control center</span>
+              <span class="tier-chip">Tier 02</span>
+              <span class="spec-chip">Rule set v2.1</span>
+            </div>
+            <h1 id="page-title">Explain every result <span>before you publish it.</span></h1>
+            <p>Convert raw marks into deterministic GPA, show the exact rule behind every number, and isolate the students a teacher should verify by hand.</p>
+            <div class="rule-strip" aria-label="Published grading rules">
+              <span><strong>6</strong> compulsory</span>
+              <span><strong>25/75</strong> theory pass</span>
+              <span><strong>8/25</strong> practical pass</span>
+              <span><strong>max(0, GP-2)</strong> optional bonus</span>
+              <span><strong>Any compulsory fail</strong> final F</span>
+            </div>
+          </div>
+
+          <article class="readiness-card" aria-label="Publication readiness">
+            <div class="readiness-top">
+              <span class="readiness-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="m8 12 2.5 2.5L16.5 8"/></svg></span>
+              <span class="live-label"><i></i> Live verification</span>
+            </div>
+            <div class="readiness-label">Publication readiness</div>
+            <div class="readiness-value"><strong data-stat="flagged">--</strong><span>students need a manual check</span></div>
+            <div class="readiness-footer">
+              <div><span>Pass rate</span><strong data-stat="passRate">--</strong></div>
+              <div><span>Results processed</span><strong data-stat="total">--</strong></div>
+            </div>
+          </article>
+        </section>
+
+        <div id="app-status" class="status-banner" data-kind="loading" role="status" aria-live="polite">
+          <span class="status-indicator"></span><span class="status-text">Loading organizer fixture...</span>
+        </div>
+
+        <section class="source-panel" aria-label="Evaluation data controls">
+          <div class="source-heading">
+            <span class="source-icon"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span>
+            <div><strong>Evaluation data</strong><span>Every result is rebuilt from raw marks in the selected case.</span></div>
+          </div>
+          <div class="source-controls">
+            <label class="field compact"><span>Case</span><select id="case-select" aria-label="Judge case"></select></label>
+            <button class="icon-btn" id="reset-case" type="button" title="Reset selected case" aria-label="Reset selected case"><svg viewBox="0 0 24 24"><path d="M4 8V4m0 0h4M4 4l4.2 4.2A7 7 0 1 1 5.4 15"/></svg></button>
+          </div>
+          <div id="case-info" class="case-info"></div>
+        </section>
+
+        <section id="import-report" class="import-report" hidden aria-live="polite"></section>
+
+        <section class="kpi-grid" aria-label="Result summary">
+          <article class="kpi-card">
+            <div class="kpi-icon kpi-blue"><svg viewBox="0 0 24 24"><path d="M4 19v-9l8-5 8 5v9M8 19v-5h8v5"/></svg></div>
+            <span>Total students</span><strong data-stat="total">--</strong><small>Across all loaded classes</small>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-icon kpi-green"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></div>
+            <span>Passed</span><strong data-stat="passed">--</strong><small data-stat="passRate">--</small>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-icon kpi-red"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17"/></svg></div>
+            <span>Failed</span><strong data-stat="failed">--</strong><small>Any compulsory failure overrides average</small>
+          </article>
+          <article class="kpi-card">
+            <div class="kpi-icon kpi-purple"><svg viewBox="0 0 24 24"><path d="m12 3 2.6 5.4 5.9.9-4.3 4.2 1 5.9-5.2-2.8-5.2 2.8 1-5.9-4.3-4.2 5.9-.9z"/></svg></div>
+            <span>A+ results</span><strong data-stat="aPlus">--</strong><small>Final GPA exactly 5.00</small>
+          </article>
+          <article class="kpi-card kpi-attention">
+            <div class="kpi-icon kpi-amber"><svg viewBox="0 0 24 24"><path d="M12 3 2.8 19h18.4L12 3Z"/><path d="M12 9v4M12 16.4v.1"/></svg></div>
+            <span>Needs checking</span><strong data-stat="flagged">--</strong><small>Unique students across all checking lists</small>
+          </article>
+        </section>
+
+        <section class="analytics-grid" aria-label="Class performance analytics">
+          <article class="panel analytics-wide">
+            <div class="panel-head"><div><span class="section-kicker">Class performance</span><h2>Pass rate and grade distribution</h2><p>Fast comparison across both classes from the same calculated result objects.</p></div><span class="micro-badge">Bonus insight</span></div>
+            <div id="class-summary" class="class-summary"></div>
+          </article>
+          <article class="panel failures-panel">
+            <div class="panel-head"><div><span class="section-kicker">Risk concentration</span><h2>Subject failures</h2><p>Subjects ranked by the number of failed student records.</p></div></div>
+            <div id="subject-failures" class="failure-list"></div>
+          </article>
+        </section>
+
+        <section class="panel results-panel" id="results" aria-labelledby="results-title">
+          <div class="panel-head results-head">
+            <div><span class="section-kicker">Required result register</span><h2 id="results-title">Student results</h2><p>Click a student to inspect the exact marks, grade points, and rules that produced the final result.</p></div>
+            <div class="filters">
+              <label class="search-box"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg><input id="search" type="search" placeholder="Search student, ID, class..." aria-label="Search students" /></label>
+              <select id="class-filter" aria-label="Filter by class"><option value="all">All classes</option></select>
+              <select id="grade-filter" aria-label="Filter by final grade"><option value="all">All grades</option><option>A+</option><option>A</option><option>A-</option><option>B</option><option>C</option><option>D</option><option>F</option></select>
+              <button class="btn btn-ghost btn-compact" id="clear-filters" type="button">Clear</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Student</th><th>Class</th><th>Optional</th><th class="number">GPA</th><th>Grade</th><th>Result</th><th>Checks</th><th class="action-col">Evidence</th></tr></thead>
+              <tbody id="students-body"></tbody>
+            </table>
+            <div id="students-empty" class="empty-state" hidden><span class="empty-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4zM8 10h8"/></svg></span><strong>No students match these filters.</strong><span>Clear the search or change the class/grade filters.</span></div>
+          </div>
+        </section>
+
+        <section class="panel checks-panel" id="checks" aria-labelledby="checks-title">
+          <div class="panel-head checks-head">
+            <div><span class="section-kicker">Required pre-publication review</span><h2 id="checks-title">Teacher checking lists</h2><p>Published clarification R-29. A student can correctly appear in more than one list.</p></div>
+            <div class="clarification-pill"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg><span><strong>Clarification aligned</strong><small>Optional <= 2/AB, practical &lt; 8, any AB</small></span></div>
+          </div>
+          <div class="check-grid">
+            <article class="check-card check-optional">
+              <div class="check-heading"><span class="check-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7"/></svg></span><div><strong>Optional check</strong><span>Optional GP <= 2.0 or optional AB</span></div><b id="optional-count">0</b></div>
+              <div id="optional-list" class="check-list"></div>
+            </article>
+            <article class="check-card check-practical">
+              <div class="check-heading"><span class="check-icon"><svg viewBox="0 0 24 24"><path d="M8 3v6l-4 8a2 2 0 0 0 1.8 3h12.4A2 2 0 0 0 20 17l-4-8V3M7 14h10"/></svg></span><div><strong>Practical fail</strong><span>Practical component below 8</span></div><b id="practical-count">0</b></div>
+              <div id="practical-list" class="check-list"></div>
+            </article>
+            <article class="check-card check-absent">
+              <div class="check-heading"><span class="check-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 4-7 8-7s7 2 8 7M5 5l14 14"/></svg></span><div><strong>Absent</strong><span>AB in any compulsory or optional subject</span></div><b id="absent-count">0</b></div>
+              <div id="absent-list" class="check-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <footer>
+          <div><strong>ResultLens</strong><span>Built for LofiStack Hackathon 2026</span></div>
+          <div class="footer-meta"><span>Team LSH26-T065</span><span>Problem P08</span><span>Tier 02</span><span>Explainable calculations</span></div>
+        </footer>
+      </main>
+    </div>
+
+    <dialog id="trace-dialog" class="trace-dialog">
+      <div class="dialog-toolbar"><span>Student calculation evidence</span><div><button id="print-trace" class="btn btn-ghost" type="button"><svg viewBox="0 0 24 24"><path d="M7 8V3h10v5M7 18H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M7 14h10v7H7z"/></svg>Print marksheet</button><button id="close-trace" class="icon-btn" type="button" aria-label="Close trace"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></div>
+      <div id="trace-content"></div>
+    </dialog>
+
+    <dialog id="paste-dialog" class="paste-dialog">
+      <div class="paste-shell">
+        <div class="paste-head"><div><span class="section-kicker">Bonus import workflow</span><h2>Paste a P08 marks case</h2><p>Valid student rows are accepted. Rejected rows are reported with the exact validation reason.</p></div><button id="close-paste" class="icon-btn" type="button" aria-label="Close paste dialog"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+        <textarea id="paste-input" spellcheck="false" placeholder='Paste one P08 case object here, e.g. { "case_id": "MY_CASE", "subjects": [...], "compulsory": [...], "students": [...] }'></textarea>
+        <div class="paste-actions"><span>Uses the exact same grading engine as organizer cases.</span><button class="btn btn-primary" id="process-paste" type="button">Validate and load</button></div>
+      </div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>
